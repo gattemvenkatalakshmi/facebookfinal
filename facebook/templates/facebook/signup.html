@@ -1,0 +1,60 @@
+
+{%extends 'facebook/base.html'%}
+{% load static %} 
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/signup.css' %}" />
+
+{% endblock %}
+{% block title %}Facebook - sign up{% endblock %}
+
+
+{% block body_block %}
+<div class="register">
+    <div class="register-form">
+        <form method="post">
+            {% csrf_token %}
+            <div class='heading'>
+                <span style="font-weight:bolder;font-size:3.2vh;line-height:3.5vh;">Sign Up</span> <br>
+                <span style="color:gray;line-height:3.5vh;">It's quick and easy.</span>
+            </div>
+            <div class='names'>
+                <span class="error-message">{{ form.first_name.errors }}</span>
+                <input type="text" name="first_name" placeholder="First name" />
+                <span class="error-message">{{ form.surname.errors }}</span>
+                <input type="text" name="surname" placeholder="Surname" />
+            </div>
+            <span class="error-message">{{ form.phone_number.errors }}</span>
+            <input type="text" name="phone_number" placeholder="Mobile number " />
+            <span class="error-message">{{ form.email_address.errors }}</span>
+            <input type="text" name="email_address" placeholder="email address" />
+            <span class="error-message">{{ form.password.errors }}</span>
+            <input type="password" name="password" placeholder="New password" />
+            <label> <span style="color:gray;font-size:1.5vh">Date of birth</span></label>
+            {{ form.date_of_birth.errors }}
+            <input type="date" name="date_of_birth" />
+            <label> <span style="color:gray;font-size:1.5vh;">Gender</span></label><br>
+            <div class='gender'>
+                <div>
+                    <label for="male">Male</label>
+                    <input type="radio" name="gender" value="male" id="male">
+                </div>
+                <div>
+                    <label for="Female">Female</label>
+                    <input type="radio" name="gender" value="Female" id="Female">
+                </div>
+                <div>
+                    <label for="Custom">Custom</label>
+                    <input type="radio" name="gender" value="custom" id="Custom">
+                </div>
+            </div>
+            
+           
+            <div class='create'><input type='submit' value='Sign up'></div>
+
+        </form>
+
+    </div>
+</div>
+
+
+{% endblock%} 

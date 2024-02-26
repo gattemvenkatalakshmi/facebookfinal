@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{%extends 'facebook/base.html'%}
+{% load static %}
+{% block extra_css %}
+
+<link rel="stylesheet" type="text/css" href="{% static "css/login.css" %}">
+{% endblock %}
+{%block title%}
+login_page
+{% endblock%}
+{%block body_block%}
+<section class="login-page">
+    <div class="right-part">
+        <h3>facebook</h3>
+        <p> Facebook helps you connect and share with the people in your life.</p>
+
+    </div>
+</div>
+    <div class="login-form">
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="email_address" placeholder="Email address or phone number" />
+            <input type="Password" name="password" placeholder="Password" />
+            <span class="error-message">{{message}}</span>
+            <input type="submit" value="Login" />
+            <div class='forgot-password'>
+                <a href='{%url "forgot_password"%}' onclick="togglePopup()">Forgotten password?</a>
+            </div>
+            <div class='create-account'>
+                <button onclick="togglePopup()"><a id="test" href='{%url "signup" %}'>Create new account</a></button>
+            </div>
+        </form>
+        <div class='create-page'><a href='.'>Create a Page</a> for a celebrity, brand or business.</div>
+    </div>
+    </div>
+
+</section>
+{% endblock %}
