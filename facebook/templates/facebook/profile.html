@@ -1,0 +1,330 @@
+{%extends 'facebook/base.html'%}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static "css/profile.css" %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+{%block title%}
+
+
+profile_page
+{% endblock%}
+{%block body_block%}
+<header>
+    <div class='logo-search'>
+        <div class='logo'>
+
+            <i class="fa-brands fa-facebook" style="font-size: 40px; color:dodgerblue"></i>
+        </div>
+        <div class='search'>
+            <form action="https://www.google.com/search?=" method="GET">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 30px "></i>
+                <input type="text" placeholder="Search Facebook">
+            </form>
+        </div>
+    </div>
+
+    <div class='nav'>
+        <div class="" ><a href='{% url "home" %}'><i class="fa-solid fa-house" style="font-size: 30px"></i></a></div>
+        <div class=""><a href='{% url "friends" %}'><i class="fa-solid fa-user-group" style="font-size: 30px;"></i></a>
+        </div>
+        <div class=""><i class="fa-solid fa-people-group" style="font-size: 30px"></i></div>
+    </div>
+
+    <div class='profile'>
+        <div class="div" id='friends'><button>Find friends</button></div>
+        <div class="div"><button><i class="fa-solid fa-bars" style="font-size: 30px"></i></button></div>
+        <div class="div"><button><i class="fa-solid fa-message" style="font-size: 30px"></i></button></div>
+        <div class="div"><button><i class="fa-solid fa-bell" style="font-size: 30px"></i></button></div>
+        <div class="div"><button onclick='openlog()' id='active'><i class="fa-solid fa-user"
+                    style="font-size: 30px"></i></button></div>
+        <div class="div"><a href='{%url "logout" %}'><button><i class="fa-solid fa-right-from-bracket"
+                        style="font-size: 30px"></i>
+                    <p>Logout</p>
+                </button></a></div>
+
+
+    </div>
+</header>
+<div style="
+    margin: 0.1% 18%;
+    background-color: white;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  ">
+    <div class="cover">
+        <img src='{{user.cover_picture.url}}' width='100%' alt-'post-image' height='100%'>
+
+        <div class="profile-pic">
+
+            <div>
+                <img class="picture" src=" {{user.profile_picture.url}}" style="background-size:cover;background-position:center; width: 180px; 
+            height: auto; border-radius: 60%;
+            overflow: hidden; ">
+                <div>
+                    <a href="upload_pictures_files" class="button-link" >
+                        <i class="fas fa-camera-retro button-icon" style="font-size: 20px; color: black !important""></i> 
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="username-menu">
+        <div class="username">
+            {{user.first_name}} {{user.surname}}
+        </div>
+        <div class="username-bar">
+            <div class="story">+ Add to story</div>
+            <div class="edit">✎ Edit profile</div>
+        </div>
+    </div>
+    <div class="menu">
+        <div id="tab">Posts</div>
+        <div>About</a></div>
+        <div>Friends</div>
+        <div>Photos</div>
+        <div>Videos</div>
+        <div>Check-ins</div>
+        <div>More</div>
+    </div>
+</div>
+
+<div class='profile-posts' style='margin: 0.1% 18% 2%;'>
+    <div style="width:40%">
+        <div class="side-menu">
+            <div class="bio">
+                <div class="bios"
+                    style='text-align:left;font-weight:bolder;font-size:3vh;background-color:white;margin:0'>
+                    Intro</div>
+                <p class="bios" style='background-color:white;font-weight: normal;'></p>
+                <div class="bios">Edit bio</div>
+                <div class="bios">Edit details</div>
+                <div class="bios">Add Hobbies</div>
+                <div class="bios">Add Featured</div>
+            </div>
+            <div class="mini"></div>
+            <div class="mini"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="bios" style='text-align:left;font-weight:bolder;font-size:3vh;background-color:white;margin:0'>
+                Photos</div>
+            <div class="side-links"><a href='{%url "my_posts" %}'>See All Photos</a></div>
+        </div>
+        <div class="main-content">
+            <div class="bios" style='text-align:left;font-weight:bolder;font-size:3vh;background-color:white;margin:0'>
+                Friends</div>
+            <div class="side-links"><a href=''>See All friends</a></div>
+        </div>
+    </div>
+
+    {% comment %} code to create a post {% endcomment %}
+
+    <div class='main'>
+        <div class='create-post'>
+            <div class='posts'>
+                <div class='user'>
+                    <img src={{user.profile_picture.url}}>
+                </div>
+                <div class='thoughts'>
+                    <button onclick='openModal()'> What's on your mind, {{user.first_name}}? </button>
+                </div>
+            </div>
+            <div class='upload'>
+                <button onclick='openModal()'><a href='{%url "create_post" %}'>
+                    <div class='image'><i class="fa-solid fa-camera-retro"style="font-size: 20px"></i></div>
+                    <div class='captions'>Photo/video</div>
+                </a>
+                </button>
+                <button>
+                    <div class='image'><i class="fa-solid fa-face-smile" style="font-size: 20px"></i></div>
+                    <div class='captions'>Feeling Activity</div>
+                </button>
+            </div>
+        </div>
+        <div class='create-post' id='create' style='width:30%;'>
+            <div class='posts'>
+                <div class='thoughts' style='text-align:center;font-weight:bolder;font-size:2vh'>
+                    Create Post
+                </div>
+                <div class='user'>
+                    <img onclick='closeModal()' src="{% static 'images/remove.png' %}" width='100%'>
+                </div>
+            </div>
+            <div class='posts' style='border-bottom:none;margin-top:2%'>
+                <div class='user'>
+                    <img src={{user.profile_picture.url}}>
+                </div>
+                <div class='thoughts' style='font-weight:bolder;margin-left:2%'>
+                    {{user.first_name}}
+                </div>
+            </div>
+            <div class='desc'>
+                <form method='post' action='/loggedin/posts/' enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <textarea id="textArea" name='desc' oninput="autoResize()"
+                        placeholder="What's on your mind, {{user.first_name}}?"></textarea>
+                    <input type="file" name='fileinput' id="mediaInput" accept="image/*,video/*"
+                        onchange="previewMedia(event)">
+                    <div style='width:100%;text-align:center;'><img id="mediaPreview" src={% static 'images/user.png' %}
+                            alt="Media Preview" width='70%'></div>
+                    <div class='post-data'><input onclick='closeModal()' type='submit' value='Post'></div>
+                </form>
+            </div>
+        </div>
+
+        {% for post in posts %}
+        <div class='create-post'>
+            <div class='posts' style='border-bottom:none;'>
+                <div class='user'>
+                    <img src={{user.profile_picture.url}}>
+                </div>
+                <div class='thoughts' style='font-weight:bolder;'>
+                    {{post.user_id.first_name}}<br>
+                    <p style='font-weight:normal;font-size:1.3vh;color:gray;'>{{post.posted}}</p>
+                </div>
+            </div>
+            {% if post.info_about_photo %}
+            <div style="padding:2%">
+                {{post.info_about_photo}}
+            </div>
+            {% endif %}
+
+            {% if post.media_file %}
+            <div>
+                <img src='{{ post.media_file.url}}' width='100%' alt-'post-image'>
+            </div>
+            {% endif %}
+
+            <div style='padding-top:1%;display:flex; align-items:center'>
+                <i class="fa-solid fa-thumbs-up" style ="font-size:20px"></i>
+                <p style='margin-left:1%;color:gray'>{{post.likes}} likes</p>
+            </div>
+
+            <div class='upload' style="border-top:2px solid rgb(188, 188, 188,.6); padding-top:1%">
+                <button>
+                    <div class='image'><i class="fa-solid fa-thumbs-up" style ="font-size:20px"></i></div>
+                    <div class='captions'>
+                        <a style='color:gray;' id='like-count' href="/loggedin/{{post.id}}">
+                            Like</a>
+                    </div>
+                </button>
+                <button onclick='openComment({{post.id}})'>
+                    <div class='image'><i class="fa-solid fa-comment" style ="font-size:20px"></i></div>
+                    <div class='captions'>Comment</div>
+                </button>
+                <button>
+                    <div class='image'><i class="fa-solid fa-share"style ="font-size:20px"></i></div>
+                    <div class='captions'>Share</div>
+                </button>
+            </div>
+        </div>
+
+        {% comment %} Designing comment {% endcomment %}
+
+        <div class='create-post' id='comments{{post.id}}'
+            style='width:40%;display: none; position: fixed; top: 50%; left: 47%; transform: translate(-50%, -50%); z-index: 2;'>
+            <div class='posts' id='comments-head'>
+                <div class='thoughts' style='text-align:center;font-weight:bolder;font-size:2vh'>
+                    {{request.user.first_name}}'s post
+                </div>
+                <div class='user'>
+                    <img onclick='closeComment({{post.id}})' src={% static 'images/remove.png' %} width='100%'>
+                </div>
+            </div>
+
+
+            {% comment %} post inside the comment {% endcomment %}
+
+            <div class='create-post' style='width:100%;margin:0%;box-shadow:none;'>
+                <div class='posts' style='border-bottom:none;'>
+                    <div class='user'>
+                        <img src={{person.profile_picture.url}}>
+                    </div>
+                    <div class='thoughts' style='font-weight:bolder;'>
+                        {{post.user.first_name}}<br>
+                        <p style='font-weight:normal;font-size:1.3vh;color:gray;'>{{post.posted}}</p>
+                    </div>
+                </div>
+                {% if post.info_about_photo %}
+                <div style="padding:2%">
+                    {{post.info_about_photo}}
+                </div>
+                {% endif %}
+
+                {% if post.media_file %}
+                <div>
+                    <img src='{{ post.media_file.url}}' width='100%' alt-'post-image'>
+                </div>
+                {% endif %}
+
+                <div style='padding-top:1%;display:flex; align-items:center'>
+                    <img src={% static 'images/likes.png' %} width='3%'>
+                    <p style='margin-left:1%;color:gray'>{{post.likes}} likes</p>
+                </div>
+
+                <div class='upload' style="border-top:2px solid rgb(188, 188, 188,.6); padding-top:1%">
+                    <button>
+                        <div class='image'><img src="{% static 'images/like.png' %}" width='100%'></div>
+                        <div class='captions'>
+                            <a id='like-count' href="/loggedin/{{post.id}}">
+                                Like</a>
+                        </div>
+                    </button>
+                    <button>
+                        <div class='image'><img src={% static 'images/chat.png' %} width='100%'></div>
+                        <div class='captions'>Comment</div>
+                    </button>
+                    <button>
+                        <div class='image'><img src={% static 'images/share.png' %}width='100%'></div>
+                        <div class='captions'>Share</div>
+                    </button>
+                </div>
+            </div>
+
+            {% comment %} Post inside comment ends here {% endcomment %}
+            {% for comment in comments %}
+            {% if comment.post.id == post.id %}
+            <div class='posts' style='border-bottom:none; padding-bottom:1%;'>
+                <div class='user'>
+                    <img src='../static/images/user.png' width='100%'>
+                </div>
+                <div class='thoughts'
+                    style='font-weight:bolder;display:inline-block;background-color:#f0f2f5;border-radius:10px'>
+                    {{ comment.user.first_name }}<br>
+                    <p style='font-weight:normal;font-size:1.3vh;color:gray;'>{{comment.created}}</p>
+                    <p style='font-weight:normal;font-size:1.8vh;color:gray;'>{{ comment.body }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% comment %} comment putting button {% endcomment %}
+            <div class='desc' id='comments-desc'>
+                <form method='post' action='/loggedin/comments/{{post.id}}/'>
+                    {% csrf_token %}
+                    <textarea id="textArea" name='comment' oninput="autoResize()"
+                        placeholder="Write a comment here..."></textarea>
+                    <div class='post-data'><input onclick='closeComment({{post.id}})' type='submit' value='Comment'>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock%}

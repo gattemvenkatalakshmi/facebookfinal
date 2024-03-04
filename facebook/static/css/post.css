@@ -1,0 +1,95 @@
+* {
+    margin: 0%;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: SFProDisplay-Regular, Helvetica, Arial, sans-serif;
+}
+
+.register {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-form {
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.3);
+    width: 25%;
+}
+
+.register-form form {
+    display: flex;
+    flex-direction: column;
+    padding: 3%;
+}
+
+.names {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1.5%;
+}
+
+.names input[type='text'] textarea {
+    width: 49%;
+}
+
+input,textarea {
+    height: 4vh;
+    margin: 1.5% 0%;
+    border-radius: 10px;
+    border: 2px solid;
+    border-color: #dddfe2;
+    padding: 2%;
+    font-size: 1.5vh;
+}
+
+.heading {
+    border-bottom: 2px solid #dddfe2;
+}
+
+.gender {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.gender div{
+    border: 2px solid #dddfe2;
+    width: 25%;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+.create-page a{
+    text-decoration: none;
+    color: #1877f2;
+}
+
+.create {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.create-page{
+    color:gray;
+    font-size:1.5vh;
+}
+input[type='submit'] {
+    width: 40%;
+    background-color: #42b72a;
+    color: white;
+    font-weight: bolder;
+    font-size: large;
+
+}
+
+
+ input:hover{
+    border-color: red;
+ }
+
+.error-message{
+    color:red;
+}

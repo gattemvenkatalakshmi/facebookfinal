@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import User
+from .models import User, Post
 from django.contrib.auth.hashers import make_password
 
 
@@ -22,4 +22,7 @@ class  UserFormToExcludeFields(UserForm):
         exclude = ['phone_number', 'first_name',
                    'surname', 'date_of_birth', 'gender']
 
-    
+class PostForm(ModelForm):
+    class Meta:
+        model = Post
+        fields = ['media_file', 'info_about_photo']

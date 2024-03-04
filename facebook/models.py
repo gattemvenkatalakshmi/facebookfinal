@@ -42,7 +42,39 @@ class User(models.Model):
         MaxLengthValidator(300),
         validate_password
     ])
+    
     date_of_birth = models.DateField(
         validators=[custom_validators.validate_is_older_than_thirteen])
     gender = models.CharField(max_length=20, choices=gender_choices)
+    profile_picture = models.ImageField(null=True, blank= True,upload_to='images/' , default='/home/venkatalakshmi/FacebookFinal/facebook/static/images/user.png')
+    cover_picture = models.ImageField(null=True, blank= True,upload_to='images/' , default='/home/venkatalakshmi/FacebookFinal/facebook/static/images/white.jpg')
 
+class Friendship(models.Model):
+    friendship_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_friendships')
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_friendships')
+
+class Post(models.Model):
+     User_id = models.ForeignKey(User, on_delete = models.CASCADE,related_name ='Stories')
+     Created_Time = models.DateTimeField(auto_now_add=True)
+     media_file = models.FileField(upload_to='images/')
+     likes = models.IntegerField(null=True,blank=True,default=0)
+     info_about_photo= models.TextField(null=True,blank=True)
+     comments = models.IntegerField(null=True, blank= True, default=0 )
+
+class FriendRequest(models.Model):
+    from_user=models.ForeignKey(User,related_name="from_user",on_delete= models.CASCADE )
+    to_user = models.ForeignKey(User, related_name="to_user",on_delete = models.CASCADE)
+    status = models.TextField(default='pending')
+
+
+class Like(models.Model):
+     post_id = models.ForeignKey(Post,on_delete = models.CASCADE, related_name ='PostLikes')     
+     from_user_id =models.ForeignKey(User,on_delete=models.CASCADE, related_name ='PostLikes')
+
+
+class Comment(models.Model):
+     post_id = models.ForeignKey(Post,on_delete=models.CASCADE,related_name= 'PostComments')
+     commented_time = models.DateTimeField(auto_now_add= True)
+     from_user_id = models.ForeignKey(User, on_delete = models.CASCADE)
+     Comment_text = models.CharField(max_length=3000, null = True)
