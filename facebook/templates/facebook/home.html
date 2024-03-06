@@ -7,16 +7,13 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% endblock %}
 {%block title%}
-
-
 home_page
 {% endblock%}
 {%block body_block%}
 <header>
 <div class='logo-search'>
     <div class='logo'>
-        
-        <i class="fa-brands fa-facebook" style="font-size: 40px; color:dodgerblue"></i>
+                <i class="fa-brands fa-facebook" style="font-size: 40px; color:dodgerblue"></i>
     </div>
     <div class='search'>
         <form action="https://www.google.com/search?=" method="GET">
@@ -25,22 +22,18 @@ home_page
         </form>
     </div>
 </div>
-
 <div class='nav'>
     <div class="" id='active'><i class="fa-solid fa-house" style="font-size: 30px"></i></div>
     <div class="" ><a href='{% url "friends" %}'><i class="fa-solid fa-user-group" style="font-size: 30px"></i></a></div>
     <div class=""><i class="fa-solid fa-people-group" style="font-size: 30px"></i></div>
 </div>
-
 <div class='profile'>
     <div class="div" id='friends'><button>Find friends</button></div>
     <div class="div"><button><i class="fa-solid fa-bars" style="font-size: 30px"></i></button></div>
     <div class="div"><button><i class="fa-solid fa-message" style="font-size: 30px"></i></button></div>
     <div class="div"><button><i class="fa-solid fa-bell" style="font-size: 30px"></i></button></div>
     <div class="div"><button onclick='openlog()'  id='user-profile'><a href='{% url "profile" %}'><i class="fa-solid fa-user" style="font-size: 30px"></i></a></button></div>
-    <div  class="div"><a href='{%url "logout" %}'><button><i class="fa-solid fa-right-from-bracket" style="font-size: 30px"></i><p>Logout</p></button></a></div>
-        
-    
+    <div  class="div"><a href='{%url "logout" %}'><button><i class="fa-solid fa-right-from-bracket" style="font-size: 30px"></i><p>Logout</p></button></a></div>   
 </div>
 </header>
 {% for post in posts %}
@@ -59,13 +52,22 @@ home_page
         {{post.info_about_photo}}
     </div>
     {% endif %}
-
     {% if post.media_file %}
-    <div>
-        <img src='{{post.media_file.url}}' width='100%' alt-'post-image'>
-    </div>
+    {% if post.media_file.url|slice:'-4:' == '.jpg' or post.media_file.url|slice:'-4:' == '.png' or post.media_file.url|slice:'-4:' == '.gif' or post.media_file.url|slice:'-5:' == '.jpeg' %}
+            <div>
+                <img src="{{post.media_file.url}}" alt="Image" width='100%' >
+            </div>
+    {% elif post.media_file.url|slice:'-4:' == '.mp4' or post.media_file.url|slice:'-5:' == '.webm' or post.media_file.url|slice:'-4:' == '.avi' %}
+            <div>
+                <img src='{{post.media_file.url}}' width='100%' alt-'post-image'>
+            </div>
+            <div>
+                <video controls>
+                    <source src="{{post.media_file.url}}" type="video/mp4" width='100%' >
+                </video>
+            </div>
     {% endif %}
-
+    {% endif %}
     <div style='padding-top:1%;display:flex; align-items:center'>
         <i class="fa-solid fa-thumbs-up" style ="font-size:20px"></i>
         <p style='margin-left:1%;color:gray'>{{post.likes}} likes</p>
@@ -75,11 +77,11 @@ home_page
         <button>
             <div class='image'><i class="fa-solid fa-thumbs-up" style ="font-size:20px"></i></div>
             <div class='captions'>
-                <a style='color:gray;' id='like-count' href="{% url 'like' id=post.post_id %}">
+                <a style='color:gray;' id='like-count' href="{% url 'like' id=post.id %}">
                     Like</a>
             </div>
         </button>
-        <button onclick='openComment({{post.id}})'>
+        <button>
             <div class='image'><i class="fa-solid fa-comment" style ="font-size:20px"></i></div>
             <div class='captions'>Comment</div>
         </button>
@@ -89,30 +91,39 @@ home_page
         </button>
     </div>
 </div>
+<div class='desc' id ='comments-desc'>
+    <form method ="post" action='{% url 'comment' id=post.id %}'style ="width :50%">
+        {% csrf_token %}
+        <textarea id="textArea" name="Comment_text" oninput="autoResize()"
+            placeholder="Write a comment here..."></textarea>
+           
+        <div class='post-data'><a href="{% url 'comment' id=post.id %}"><input  type='submit' value='Comment'></a>
+        </div>
+    </form>
+</div>
 
 {% comment %} Designing comment {% endcomment %}
 
 <div class='create-post' id='comments{{post.id}}'
-    style='width:40%;display: none; position: fixed; top: 50%; left: 47%; transform: translate(-50%, -50%); z-index: 2;'>
+    style='width:40%;display: none; position: fixed; top:50%; left:47%; transform:translate(-50%, -50%); z-index: 2;'>
     <div class='posts' id='comments-head'>
         <div class='thoughts' style='text-align:center;font-weight:bolder;font-size:2vh'>
-            {{request.user.first_name}}'s post
+            {{user.first_name}}'s post
         </div>
         <div class='user'>
-            <img onclick='closeComment({{post.id}})' src={% static 'images/remove.png' %} width='100%'>
+            <img  src={% static 'images/remove.png' %} width='100%'>
         </div>
     </div>
 
 
     {% comment %} post inside the comment {% endcomment %}
-
     <div class='create-post' style='width:100%;margin:0%;box-shadow:none;'>
         <div class='posts' style='border-bottom:none;'>
             <div class='user'>
-                <img src={{person.profile_picture.url}}>
+                <img src={{user.profile_picture.url}}>
             </div>
             <div class='thoughts' style='font-weight:bolder;'>
-                {{post.user.first_name}}<br>
+                {{user.first_name}}<br>
                 <p style='font-weight:normal;font-size:1.3vh;color:gray;'>{{post.posted}}</p>
             </div>
         </div>
@@ -124,7 +135,7 @@ home_page
 
         {% if post.media_file %}
         <div>
-            <img src='{{ post.media_file.url}}' width='100%' alt-'post-image'>
+            <img src='{{post.media_file.url}}' width='100%' alt-'post-image'>
         </div>
         {% endif %}
 
@@ -154,30 +165,22 @@ home_page
 
     {% comment %} Post inside comment ends here {% endcomment %}
     {% for comment in comments %}
-    {% if comment.post.id == post.id %}
+    {% if comment.post_id == post.id %}
     <div class='posts' style='border-bottom:none; padding-bottom:1%;'>
         <div class='user'>
             <img src='../static/images/user.png' width='100%'>
         </div>
         <div class='thoughts'
             style='font-weight:bolder;display:inline-block;background-color:#f0f2f5;border-radius:10px'>
-            {{ comment.user.first_name }}<br>
-            <p style='font-weight:normal;font-size:1.3vh;color:gray;'>{{comment.created}}</p>
-            <p style='font-weight:normal;font-size:1.8vh;color:gray;'>{{ comment.body }}</p>
+            {{ comment.from_user_id.first_name }}<br>
+            <p style='font-weight:normal;font-size:1.3vh;color:gray;'>{{comment.commented_time}}</p>
+            <p style='font-weight:normal;font-size:1.8vh;color:gray;'>{{ comment.Comment_text }}</p>
         </div>
     </div>
     {% endif %}
     {% endfor %}
     {% comment %} comment putting button {% endcomment %}
-    <div class='desc' id='comments-desc'>
-        <form method='post' action='/loggedin/comments/{{post.id}}/'>
-            {% csrf_token %}
-            <textarea id="textArea" name='comment' oninput="autoResize()"
-                placeholder="Write a comment here..."></textarea>
-            <div class='post-data'><input onclick='closeComment({{post.id}})' type='submit' value='Comment'>
-            </div>
-        </form>
-    </div>
+    
 </div>
 {% endfor %}
 

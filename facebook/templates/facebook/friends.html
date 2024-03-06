@@ -7,15 +7,12 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% endblock %}
 {%block title%}
-
-
 friend_page
 {% endblock%}
 {%block body_block%}
 <header>
     <div class='logo-search'>
         <div class='logo'>
-
             <i class="fa-brands fa-facebook" style="font-size: 40px; color:dodgerblue"></i>
         </div>
         <div class='search'>
@@ -39,14 +36,12 @@ friend_page
         <div class="div"><button><i class="fa-solid fa-bars" style="font-size: 30px"></i></button></div>
         <div class="div"><button><i class="fa-solid fa-message" style="font-size: 30px"></i></button></div>
         <div class="div"><button><i class="fa-solid fa-bell" style="font-size: 30px"></i></button></div>
-        <div class="div"><button onclick='openlog()' id='user-profile'><a href='{% url "profile" %}'><i class="fa-solid fa-user"
+        <div class="div"><button  id='user-profile'><a href='{% url "profile" %}'><i class="fa-solid fa-user"
                     style="font-size: 30px"></i></a></button></div>
         <div class="div"><a href='{%url "logout" %}'><button><i class="fa-solid fa-right-from-bracket"
                         style="font-size: 30px"></i>
                     <p>Logout</p>
                 </button></a></div>
-
-
     </div>
 </header>
 <section>
@@ -60,7 +55,6 @@ friend_page
             <div class="div1">
                 <button>
                     <div class='side-logos'>
-
                     </div>
                     <div>
                         Home
@@ -72,10 +66,8 @@ friend_page
                     <a href='{%url "show_Requests" %}'>
                         <div class='side-logos'>
                             <i class="fa-solid fa-user-plus">
-
                             </i>
                         </div>
-
                         <div>
                             Friend requests
                         </div>
@@ -85,11 +77,9 @@ friend_page
             <div class="div1">
                 <button>
                     <div class='side-logos'>
-
                     </div>
                     <div>
                         Suggestions
-
                     </div>
                 </button>
             </div>
@@ -97,13 +87,10 @@ friend_page
                 <button>
                     <a href='{% url "view_friends" %}'>
                         <div class='side-logos'>
-
                         </div>
-
                         <div>All friends</span></div>
                     </a>
                 </button>
-
             </div>
             <div class="div1">
                 <button>
@@ -117,12 +104,8 @@ friend_page
                     <div>Custom lists</div>
                 </button>
             </div>
-
        </div>
-
-
         <div class="right-part">
-
             {% if pending_friend_requests %}
             <div class="grid-container">
                 {% for friend in pending_friend_requests %}
@@ -139,26 +122,18 @@ friend_page
                             <button type="submit">Reject</button>
                         </form>
                     </div>
-                {% endfor %}
-               
+                {% endfor %}               
             </div>
-
             {% endif %}
-
-
             {% if friends_to_user %}
             <div class="grid-container">
-
                 {% for friend in friends_to_user %}
                 <div class="grid-item">
                     <img src="{{ friend.profile_picture.url }}" alt="{{ friend.first_name }} {{ friend.last_name }}">
                     <p>{{friend.first_name}} {{friend.surname}}</p>
-                    
                 </div>
                 {% endfor %}
             </div>
-
-
             {% endif %}
             {% if people_you_may_know %}
             <div class="grid-container">
@@ -174,11 +149,7 @@ friend_page
                 </div>
                 {% endfor %}
             </div>
-
-
-
-            {% endif %}
-           
+            {% endif %}         
         </div>
     </div>
 </section>

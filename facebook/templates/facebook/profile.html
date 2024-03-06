@@ -59,11 +59,11 @@ profile_page
         <div class="profile-pic">
 
             <div>
-                <img class="picture" src=" {{user.profile_picture.url}}" style="background-size:cover;background-position:center; width: 180px; 
+                <img class="picture" src="{{user.profile_picture.url}}" style="background-size:cover;background-position:center; width: 180px; 
             height: auto; border-radius: 60%;
             overflow: hidden; ">
                 <div>
-                    <a href="upload_pictures_files" class="button-link" >
+                    <a href="change_picture" class="button-link" >
                         <i class="fas fa-camera-retro button-icon" style="font-size: 20px; color: black !important""></i> 
                     </a>
                 </div>
@@ -163,7 +163,7 @@ profile_page
                 </div>
             </div>
             <div class='desc'>
-                <form method='post' action='/loggedin/posts/' enctype="multipart/form-data">
+                <form method='post' action='' enctype="multipart/form-data">
                     {% csrf_token %}
                     <textarea id="textArea" name='desc' oninput="autoResize()"
                         placeholder="What's on your mind, {{user.first_name}}?"></textarea>
@@ -194,10 +194,21 @@ profile_page
             {% endif %}
 
             {% if post.media_file %}
+            {% if post.media_file.url|slice:'-4:' == '.jpg' or post.media_file.url|slice:'-4:' == '.png' or post.media_file.url|slice:'-4:' == '.gif' or post.media_file.url|slice:'-5:' == '.jpeg' %}
             <div>
-                <img src='{{ post.media_file.url}}' width='100%' alt-'post-image'>
+                <img src="{{post.media_file.url}}" alt="Image" width='100%' >
             </div>
-            {% endif %}
+            {% elif post.media_file.url|slice:'-4:' == '.mp4' or post.media_file.url|slice:'-5:' == '.webm' or post.media_file.url|slice:'-4:' == '.avi' %}         
+                 <div>
+                    <video controls>
+                    <source src="{{post.media_file.url}}" type="video/mp4" width='100%' >
+                    </video>
+                 </div>
+           {% endif %}
+           {% endif %} 
+            
+               
+
 
             <div style='padding-top:1%;display:flex; align-items:center'>
                 <i class="fa-solid fa-thumbs-up" style ="font-size:20px"></i>
@@ -208,11 +219,11 @@ profile_page
                 <button>
                     <div class='image'><i class="fa-solid fa-thumbs-up" style ="font-size:20px"></i></div>
                     <div class='captions'>
-                        <a style='color:gray;' id='like-count' href="/loggedin/{{post.id}}">
+                        <a style='color:gray;' id='like-count' href="">
                             Like</a>
                     </div>
                 </button>
-                <button onclick='openComment({{post.id}})'>
+                <button >
                     <div class='image'><i class="fa-solid fa-comment" style ="font-size:20px"></i></div>
                     <div class='captions'>Comment</div>
                 </button>
@@ -222,6 +233,32 @@ profile_page
                 </button>
             </div>
         </div>
+        {% comment %} Post inside comment ends here {% endcomment %}
+            {% for comment in comments %}
+            {% if comment.post_id.id == post.id %}
+            <div class='posts' style='border-bottom:none; padding-bottom:1%;'>
+                <div class='user'>
+                    <img src='../static/images/user.png' width='100%'>
+                </div>
+                <div class='thoughts'
+                    style='font-weight:bolder;display:inline-block;background-color:#f0f2f5;border-radius:10px'>
+                    {{ comment.from_user_id.first_name }}<br>
+                    <p style='font-weight:normal;font-size:1.3vh;color:gray;'>{{comment.commented_time}}</p>
+                    <p style='font-weight:normal;font-size:1.8vh;color:gray;'>{{ comment.Comment_text }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% comment %} comment putting button {% endcomment %}
+            <div class='desc' id='comments-desc'>
+                <form method='post' action='/loggedin/comments/{{post.id}}/'>
+                    {% csrf_token %}
+                    <textarea id="textArea" name='comment' oninput="autoResize()"
+                        placeholder="Write a comment here..."></textarea>
+                    <div class='post-data'><input onclick='closeComment({{post.id}})' type='submit' value='Comment'>
+                    </div>
+                </form>
+            </div>
 
         {% comment %} Designing comment {% endcomment %}
 
@@ -229,7 +266,7 @@ profile_page
             style='width:40%;display: none; position: fixed; top: 50%; left: 47%; transform: translate(-50%, -50%); z-index: 2;'>
             <div class='posts' id='comments-head'>
                 <div class='thoughts' style='text-align:center;font-weight:bolder;font-size:2vh'>
-                    {{request.user.first_name}}'s post
+                    {{user.first_name}}'s post
                 </div>
                 <div class='user'>
                     <img onclick='closeComment({{post.id}})' src={% static 'images/remove.png' %} width='100%'>
