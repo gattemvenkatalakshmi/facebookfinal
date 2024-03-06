@@ -1,0 +1,13 @@
+bcrypt==3.2.0
+Django==3.2.12
+django-debug-toolbar==4.3.0
+django-filter==23.5
+django-phonenumber-field==7.3.0
+djangorestframework==3.14.0
+language-selector==0.1
+phonenumberslite==8.13.30
+Pillow==9.0.1
+sqlparse==0.4.2
+psycopg2==2.9.9
+passlib==1.7.4
+lockfile==0.12.2
